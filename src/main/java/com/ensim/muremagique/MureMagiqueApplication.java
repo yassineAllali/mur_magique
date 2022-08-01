@@ -1,11 +1,16 @@
 package com.ensim.muremagique;
 
+import com.ensim.muremagique.services.infrastructure.StorageException;
+import com.ensim.muremagique.services.infrastructure.StorageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import java.io.IOException;
+import java.nio.file.Files;
 
 @SpringBootApplication
 public class MureMagiqueApplication {

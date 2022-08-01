@@ -2,6 +2,7 @@ package com.ensim.muremagique.services;
 
 import com.ensim.muremagique.entities.Code;
 import com.ensim.muremagique.repositories.CodeRepository;
+import com.ensim.muremagique.services.infrastructure.StorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,10 +11,12 @@ import java.util.List;
 @Service
 public class CodeService {
 
-    private CodeRepository codeRepository;
+    private final CodeRepository codeRepository;
+    private final StorageService storageService;
 
-    public CodeService(CodeRepository codeRepository) {
+    public CodeService(CodeRepository codeRepository, StorageService storageService) {
         this.codeRepository = codeRepository;
+        this.storageService = storageService;
     }
 
     public List<Code> getAll() {
@@ -31,6 +34,8 @@ public class CodeService {
     }
 
     public Code uploadCode(MultipartFile file) {
+
+        storageService.store(file);
 
         return createCode("fileDownloadUri");
     }
