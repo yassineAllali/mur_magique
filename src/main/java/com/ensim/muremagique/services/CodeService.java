@@ -9,34 +9,45 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class CodeService {
+public class CodeService
+{
 
-    private final CodeRepository codeRepository;
-    private final StorageService storageService;
+	private final CodeRepository codeRepository;
+	private final StorageService storageService;
 
-    public CodeService(CodeRepository codeRepository, StorageService storageService) {
-        this.codeRepository = codeRepository;
-        this.storageService = storageService;
-    }
+	public CodeService(CodeRepository codeRepository, StorageService storageService)
+	{
+		this.codeRepository = codeRepository;
+		this.storageService = storageService;
+	}
 
-    public List<Code> getAll() {
-        return codeRepository.findAll();
-    }
+	public List<Code> getAll()
+	{
+		return codeRepository.findAll();
+	}
 
-    public Code getCode(Long id) {
-        return codeRepository.findById(id).orElseThrow(() -> new NotFoundException("Code not foud"));
-    }
+	public Code getCode(Long id)
+	{
 
-    public Code createCode(String path) {
-        Code code = new Code(path);
-        codeRepository.save(code);
-        return code;
-    }
+		Code code = codeRepository.findById(id).orElseThrow(
+			() -> new NotFoundException("Code not foud"));
+		return code;
+	}
 
-    public Code uploadCode(MultipartFile file) {
+	public Code createCode(String path)
+	{
+		Code code = new Code(path, 0);
+		long order = codeRepository.count();
+		code.setOrder((int)(order + 1));
+		codeRepository.save(code);
+		return code;
+	}
 
-        storageService.store(file);
+	public Code uploadCode(MultipartFile file)
+	{
 
-        return createCode("fileDownloadUri");
-    }
+		storageService.store(file);
+
+		return createCode(file.getOriginalFilename());
+	}
 }

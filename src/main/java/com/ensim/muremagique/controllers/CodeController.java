@@ -27,7 +27,6 @@ public class CodeController {
     @GetMapping("/{id}")
     public Code getCode(@PathVariable Long id)
     {
-        System.out.println(id);
         return codeService.getCode(id);
     }
 

@@ -14,10 +14,14 @@ public class Code {
     @Column(unique = true, nullable = false)
     private String path;
 
+    @Column(unique = true, nullable = false)
+    private Integer order;
+
     public Code(){}
 
-    public Code(String path) {
+    public Code(String path, Integer order) {
         this.path = path;
+        this.order = order;
     }
 
     public Long getId() {
@@ -34,5 +38,15 @@ public class Code {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Integer getOrder()
+    {
+        return order;
+    }
+
+    public void setOrder(Integer order)
+    {
+        this.order = order;
     }
 }
