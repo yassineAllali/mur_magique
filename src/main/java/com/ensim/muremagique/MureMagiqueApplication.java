@@ -19,7 +19,7 @@ public class MureMagiqueApplication {
 		SpringApplication.run(MureMagiqueApplication.class, args);
 	}
 
-	@Configuration
+	/*@Configuration
 	@EnableWebSecurity
 	public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -30,5 +30,5 @@ public class MureMagiqueApplication {
 					.authorizeRequests()
 					.anyRequest().permitAll();
 		}
-	}
+	}*/
 }
