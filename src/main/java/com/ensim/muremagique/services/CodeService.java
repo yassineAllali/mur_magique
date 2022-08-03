@@ -30,12 +30,15 @@ public class CodeService
 	{
 
 		Code code = codeRepository.findById(id).orElseThrow(
-			() -> new NotFoundException("Code not foud"));
+			() -> new BusinessException("Code not foud"));
 		return code;
 	}
 
 	public Code addCode(MultipartFile file)
 	{
+		if(codeRepository.existsByPath(file.getOriginalFilename())){
+			throw new BusinessException("Code already exist");
+		}
 		storageService.store(file);
 		Code code = new Code(file.getOriginalFilename(), 0);
 		long order = codeRepository.count();
@@ -47,6 +50,9 @@ public class CodeService
 	public Code popCode()
 	{
 		List<Code> orderedCodes = codeRepository.findByOrderByOrderAsc();
+		if(orderedCodes.size() == 0){
+			throw new BusinessException("Code Queue is empty");
+		}
 		Code codeToBeDeleted = orderedCodes.get(0);
 
 		orderedCodes.forEach(code -> {
