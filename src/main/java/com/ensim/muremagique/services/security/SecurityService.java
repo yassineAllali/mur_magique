@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +37,12 @@ public class SecurityService
 		authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(username, password));
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-		return jwtService.generateToken(userDetails);
+		try{
+			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+			return jwtService.generateToken(userDetails);
+		}catch(UsernameNotFoundException e){
+			throw new UsernameNotFoundException("Email not found");
+		}
 	}
 
 	public String register(String email, String password, String firstName, String lastName,
