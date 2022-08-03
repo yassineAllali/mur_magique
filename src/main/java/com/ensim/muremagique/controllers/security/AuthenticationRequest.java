@@ -1,8 +1,12 @@
 package com.ensim.muremagique.controllers.security;
 
+import javax.validation.constraints.NotBlank;
+
 public class AuthenticationRequest
 {
+	@NotBlank
 	private String username;
+	@NotBlank
 	private String password;
 
 	public AuthenticationRequest(){}

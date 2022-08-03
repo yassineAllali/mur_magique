@@ -15,30 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SecurityController
 {
-	private final AuthenticationManager authenticationManager;
-	private final UserDetailsService userDetailsService;
-	private final JwtService jwtService;
+	private final SecurityService securityService;
 
-	public SecurityController(AuthenticationManager authenticationManager,
-		UserDetailsService userDetailsService, JwtService jwtService)
+	public SecurityController(SecurityService securityService)
 	{
-		this.authenticationManager = authenticationManager;
-		this.userDetailsService = userDetailsService;
-		this.jwtService = jwtService;
+		this.securityService = securityService;
 	}
 
 	@PostMapping("/auth")
 	public ResponseEntity<?> createAuthenticationToken(
 		@RequestBody AuthenticationRequest authenticationRequest)
 	{
-		authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-				authenticationRequest.getPassword()));
+		String jwt = securityService.authenticate(authenticationRequest.getUsername(),
+			authenticationRequest.getPassword());
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(
-			authenticationRequest.getUsername());
+		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+	}
 
-		String jwt = jwtService.generateToken(userDetails);
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest)
+	{
+		String jwt = securityService.register(registrationRequest.getEmail(),
+			registrationRequest.getPassword(), registrationRequest.getFirstName(),
+			registrationRequest.getLastName(), registrationRequest.getRole());
 
 		return ResponseEntity.ok(new AuthenticationResponse(jwt));
 	}
