@@ -33,6 +33,12 @@ public class CodeController {
     @PostMapping()
     public Code createCode(@RequestParam() MultipartFile code)
     {
-        return codeService.uploadCode(code);
+        return codeService.addCode(code);
+    }
+
+    @PostMapping("/pop")
+    public Code pop()
+    {
+        return codeService.popCode();
     }
 }

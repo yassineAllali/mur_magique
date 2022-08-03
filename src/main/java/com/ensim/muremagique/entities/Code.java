@@ -14,7 +14,7 @@ public class Code {
     @Column(unique = true, nullable = false)
     private String path;
 
-    @Column(unique = true, nullable = false)
+    @Column(name="code_order", unique = true, nullable = false)
     private Integer order;
 
     public Code(){}

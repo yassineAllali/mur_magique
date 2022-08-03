@@ -34,20 +34,29 @@ public class CodeService
 		return code;
 	}
 
-	public Code createCode(String path)
+	public Code addCode(MultipartFile file)
 	{
-		Code code = new Code(path, 0);
+		storageService.store(file);
+		Code code = new Code(file.getOriginalFilename(), 0);
 		long order = codeRepository.count();
 		code.setOrder((int)(order + 1));
 		codeRepository.save(code);
 		return code;
 	}
 
-	public Code uploadCode(MultipartFile file)
+	public Code popCode()
 	{
+		List<Code> orderedCodes = codeRepository.findByOrderByOrderAsc();
+		Code codeToBeDeleted = orderedCodes.get(0);
 
-		storageService.store(file);
+		orderedCodes.forEach(code -> {
+			code.setOrder(code.getOrder() - 1);
+			codeRepository.save(code);
+		});
 
-		return createCode(file.getOriginalFilename());
+		codeRepository.delete(codeToBeDeleted);
+		return codeToBeDeleted;
 	}
+
+
 }
