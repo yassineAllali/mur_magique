@@ -61,8 +61,9 @@ public class CodeService
 		});
 
 		codeRepository.delete(codeToBeDeleted);
+
+		storageService.remove(codeToBeDeleted.getPath());
+
 		return codeToBeDeleted;
 	}
-
-
 }

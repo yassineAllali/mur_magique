@@ -84,6 +84,18 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public void remove(String filename)
+    {
+        Path toBeDeletedPath = load(filename);
+
+        try {
+            Files.deleteIfExists(toBeDeletedPath);
+        } catch (IOException e) {
+            throw new StorageException("Can't delete file : " + filename);
+        }
+    }
+
+    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
