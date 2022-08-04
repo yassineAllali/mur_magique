@@ -28,6 +28,11 @@ public class JwtService
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
+	public void expireToken(String token)
+	{
+
+	}
+
 
 	private String createToken(Map<String, Object> claims, String subject)
 	{

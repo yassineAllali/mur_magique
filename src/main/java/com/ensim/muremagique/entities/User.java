@@ -2,12 +2,17 @@ package com.ensim.muremagique.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +39,9 @@ public class User {
 
 	@Column(nullable = false)
 	private String role;
+
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Code> codes;
 
 	public User(String email, String password, String firstName, String lastName, String role)
 	{
@@ -66,6 +74,7 @@ public class User {
 		this.email = email;
 	}
 
+	@JsonIgnore
 	public String getPassword()
 	{
 		return password;
@@ -104,5 +113,16 @@ public class User {
 	public void setRole(String role)
 	{
 		this.role = role;
+	}
+
+	@JsonIgnore
+	public List<Code> getCodes()
+	{
+		return codes;
+	}
+
+	public void setCodes(List<Code> codes)
+	{
+		this.codes = codes;
 	}
 }

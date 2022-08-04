@@ -2,6 +2,7 @@ package com.ensim.muremagique.controllers;
 
 import com.ensim.muremagique.services.BusinessException;
 import com.ensim.muremagique.services.infrastructure.StorageException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class RestResponseEntityExceptionHandler
 	}
 
 	@ExceptionHandler(value
-		= {UsernameNotFoundException.class})
+		= {UsernameNotFoundException.class, ExpiredJwtException.class})
 	protected ResponseEntity<Object> notAuthorized(RuntimeException ex, WebRequest request)
 	{
 		return handleExceptionInternal(ex, ex.getMessage(),
