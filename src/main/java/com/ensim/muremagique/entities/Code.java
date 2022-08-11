@@ -1,5 +1,7 @@
 package com.ensim.muremagique.entities;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,8 +16,8 @@ public class Code {
     @Column(unique = true, nullable = false)
     private String path;
 
-    @Column(name="code_order", unique = true, nullable = false)
-    private Integer order;
+    @Column(nullable = false)
+    private Date creationDate;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
@@ -23,9 +25,9 @@ public class Code {
 
     public Code(){}
 
-    public Code(String path, Integer order, User user) {
+    public Code(String path, Date creationDate, User user) {
         this.path = path;
-        this.order = order;
+        this.creationDate = creationDate;
         this.user = user;
     }
 
@@ -45,14 +47,14 @@ public class Code {
         this.path = path;
     }
 
-    public Integer getOrder()
+    public Date getCreationDate()
     {
-        return order;
+        return creationDate;
     }
 
-    public void setOrder(Integer order)
+    public void setCreationDate(Date creationDate)
     {
-        this.order = order;
+        this.creationDate = creationDate;
     }
 
     public User getUser()

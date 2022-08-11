@@ -1,6 +1,7 @@
 package com.ensim.muremagique.controllers;
 
 import com.ensim.muremagique.services.BusinessException;
+import com.ensim.muremagique.services.NotFoundException;
 import com.ensim.muremagique.services.infrastructure.StorageException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +20,18 @@ public class RestResponseEntityExceptionHandler
 
 	@ExceptionHandler(value
 		= {BusinessException.class, StorageException.class})
-	protected ResponseEntity<Object> notFound(RuntimeException ex, WebRequest request)
+	protected ResponseEntity<Object> businessException(RuntimeException ex, WebRequest request)
 	{
 		return handleExceptionInternal(ex, ex.getMessage(),
 			new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler(value
+		= {NotFoundException.class})
+	protected ResponseEntity<Object> notFound(RuntimeException ex, WebRequest request)
+	{
+		return handleExceptionInternal(ex, ex.getMessage(),
+			new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 
 	@ExceptionHandler(value

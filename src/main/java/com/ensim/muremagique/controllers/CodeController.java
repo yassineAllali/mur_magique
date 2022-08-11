@@ -57,9 +57,9 @@ public class CodeController
 		return codeService.addCode(code, username);
 	}
 
-	@PostMapping("/pop")
-	public Code pop()
+	@DeleteMapping("/{id}")
+	public Code delete(@PathVariable Long id)
 	{
-		return codeService.popCode();
+		return codeService.deleteCode(id);
 	}
 }

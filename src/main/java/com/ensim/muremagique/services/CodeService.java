@@ -5,12 +5,16 @@ import com.ensim.muremagique.entities.User;
 import com.ensim.muremagique.repositories.CodeRepository;
 import com.ensim.muremagique.repositories.UserRepository;
 import com.ensim.muremagique.services.infrastructure.StorageService;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,14 +35,20 @@ public class CodeService
 
 	public List<Code> getAll()
 	{
-		return codeRepository.findAll();
+		String sortBy = "creationDate";
+		String sortDir = "asc";
+
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?
+			Sort.by(sortBy).ascending(): Sort.by(sortBy).descending();
+
+		return codeRepository.findAll(sort);
 	}
 
 	public Code getCode(Long id)
 	{
 
 		Code code = codeRepository.findById(id).orElseThrow(
-			() -> new BusinessException("Code not foud"));
+			() -> new NotFoundException("Code not foud"));
 		return code;
 	}
 
@@ -48,36 +58,24 @@ public class CodeService
 			throw new BusinessException("Code already exist");
 		}
 
-
-
 		User user = userRepository.findFirstByEmail(email).orElseThrow(
 			() -> new UsernameNotFoundException("username not found"));
 
 		storageService.store(file);
-		Code code = new Code(file.getOriginalFilename(), 0, user);
-		long order = codeRepository.count();
-		code.setOrder((int)(order + 1));
+		Code code = new Code(file.getOriginalFilename(), new Date(), user);
 		codeRepository.save(code);
 		return code;
 	}
 
-	public Code popCode()
+	public Code deleteCode(Long id)
 	{
-		List<Code> orderedCodes = codeRepository.findByOrderByOrderAsc();
-		if (orderedCodes.size() == 0) {
-			throw new BusinessException("Code Queue is empty");
-		}
-		Code codeToBeDeleted = orderedCodes.get(0);
-
-		orderedCodes.forEach(code -> {
-			code.setOrder(code.getOrder() - 1);
-			codeRepository.save(code);
-		});
-
-		codeRepository.delete(codeToBeDeleted);
+		Code codeToBeDeleted = codeRepository.findById(id).orElseThrow(
+			() -> new NotFoundException("Code not found"));
+		User owner = codeToBeDeleted.getUser();
+		owner.getCodes().remove(codeToBeDeleted);
+		userRepository.save(owner);
 
 		storageService.remove(codeToBeDeleted.getPath());
-
 		return codeToBeDeleted;
 	}
 }
