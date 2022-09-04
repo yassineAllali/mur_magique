@@ -17,17 +17,19 @@ import java.util.List;
 public class CodeController
 {
 
-	private CodeService codeService;
+	private final CodeService codeService;
+	private final Mapper mapper;
 
 	public CodeController(CodeService codeService)
 	{
 		this.codeService = codeService;
+		this.mapper = new Mapper();
 	}
 
 	@GetMapping
-	public List<Code> getAll()
+	public List<CodeResponse> getAll()
 	{
-		return codeService.getAll();
+		return mapper.map(codeService.getAll());
 	}
 
 	@GetMapping("/{id}")
@@ -36,8 +38,14 @@ public class CodeController
 		return codeService.getCode(id);
 	}
 
+	@GetMapping("/first")
+	public Code getFirstCode()
+	{
+		return codeService.getFirstCode();
+	}
+
 	@PostMapping()
-	public Code createCode(@RequestParam() MultipartFile code,
+	public Code addCode(@RequestParam() MultipartFile code,
 		@CurrentSecurityContext(expression = "authentication") Authentication authentication)
 	{
 		Object principal = authentication.getPrincipal();
@@ -58,7 +66,7 @@ public class CodeController
 	}
 
 	@DeleteMapping("/{id}")
-	public Code delete(@PathVariable Long id)
+	public Code deleteCode(@PathVariable Long id)
 	{
 		return codeService.deleteCode(id);
 	}

@@ -37,10 +37,10 @@ public class SecurityService
 		authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(username, password));
 
-		try{
+		try {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			return jwtService.generateToken(userDetails);
-		}catch(UsernameNotFoundException e){
+		} catch (UsernameNotFoundException e) {
 			throw new UsernameNotFoundException("Email not found");
 		}
 	}
@@ -59,5 +59,30 @@ public class SecurityService
 		userRepository.save(user);
 
 		return authenticate(email, password);
+	}
+
+	public User getUser(Long id)
+	{
+		return userRepository.findById(id).orElseThrow(
+			() -> new BusinessException("User Not Found"));
+	}
+
+	public Long getUserId(String username)
+	{
+		User user = userRepository.findFirstByEmail(username).orElseThrow(
+			() -> new BusinessException("User not found"));
+
+		return user.getId();
+	}
+
+	public User updateUser(Long id, String firstName, String lastName, String email)
+	{
+		User user = userRepository.findById(id).orElseThrow(
+			() -> new BusinessException("User Not Found"));
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+
+		return userRepository.save(user);
 	}
 }

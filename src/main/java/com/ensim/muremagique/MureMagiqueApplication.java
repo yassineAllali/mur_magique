@@ -4,10 +4,14 @@ import com.ensim.muremagique.services.infrastructure.StorageException;
 import com.ensim.muremagique.services.infrastructure.StorageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,16 +23,20 @@ public class MureMagiqueApplication {
 		SpringApplication.run(MureMagiqueApplication.class, args);
 	}
 
-	/*@Configuration
-	@EnableWebSecurity
-	public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-					.csrf().disable()
-					.authorizeRequests()
-					.anyRequest().permitAll();
+	@Configuration
+	public class CorsConfiguration
+	{
+		@Bean
+		public WebMvcConfigurer corsConfigurer()
+		{
+			return new WebMvcConfigurer() {
+				@Override
+				public void addCorsMappings(CorsRegistry registry) {
+					registry.addMapping("/**")
+						.allowedMethods("POST", "PUT", "GET", "DELETE", "OPTION").allowedOrigins(
+						org.springframework.web.cors.CorsConfiguration.ALL);
+				}
+			};
 		}
-	}*/
+	}
 }

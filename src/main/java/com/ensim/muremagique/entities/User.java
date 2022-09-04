@@ -49,7 +49,7 @@ public class User {
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.role = ROLES.contains(role) ? role : "student";
+		this.role = (role != null && ROLES.contains(role)) ? role : "student";
 	}
 
 	public User(){}

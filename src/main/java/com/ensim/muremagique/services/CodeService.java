@@ -52,6 +52,15 @@ public class CodeService
 		return code;
 	}
 
+	public Code getFirstCode()
+	{
+		List<Code> codes = getAll();
+		if( codes.size() <= 0) {
+			throw new BusinessException("Codes list is empty!");
+		}
+		return codes.get(0);
+	}
+
 	public Code addCode(MultipartFile file, String email)
 	{
 		if (codeRepository.existsByPath(file.getOriginalFilename())) {
