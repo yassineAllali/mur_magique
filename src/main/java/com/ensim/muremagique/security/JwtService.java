@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class JwtService
 {
 	private static final String SECRET = "ensim_secret";
+	private static final long DURATION = 1000 * 60 * 60 * 10; // 10 hours
 
 	public String generateToken(UserDetails userDetails)
 	{
@@ -28,16 +29,10 @@ public class JwtService
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
-	public void expireToken(String token)
-	{
-
-	}
-
-
 	private String createToken(Map<String, Object> claims, String subject)
 	{
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(
-			new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+			new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + DURATION))
 			.signWith(SignatureAlgorithm.HS256, SECRET).compact();
 	}
 
