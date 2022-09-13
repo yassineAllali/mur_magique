@@ -71,7 +71,7 @@ public class CodeService
 			() -> new UsernameNotFoundException("username not found"));
 
 		storageService.store(file);
-		Code code = new Code(file.getOriginalFilename(), new Date(), user);
+		Code code = new Code(file.getOriginalFilename(), new Date(), file.getSize(), user);
 		codeRepository.save(code);
 		return code;
 	}

@@ -45,7 +45,7 @@ public class CodeServiceTest
 
 		doNothing().when(storageService).store(any());
 		given(codeRepository.count()).willReturn(0l);
-		given(codeRepository.save(any(Code.class))).willReturn(new Code("dummy", new Date(), new User()));
+		given(codeRepository.save(any(Code.class))).willReturn(new Code("dummy", new Date(), 0, new User()));
 
 		// When
 		Code actual = codeService.addCode(file, email);
@@ -64,7 +64,7 @@ public class CodeServiceTest
 
 		doNothing().when(storageService).store(any());
 		given(codeRepository.count()).willReturn(0l);
-		given(codeRepository.save(any(Code.class))).willReturn(new Code("dummy", new Date(), new User()));
+		given(codeRepository.save(any(Code.class))).willReturn(new Code("dummy", new Date(), 0, new User()));
 		given(codeRepository.existsByPath("test")).willReturn(true);
 
 		// Then
@@ -78,7 +78,7 @@ public class CodeServiceTest
 	public void popCodeShouldSucceed()
 	{
 		// Given
-		List<Code> codes = List.of(new Code("test1", new Date(), new User()), new Code("test2", new Date(), new User()));
+		List<Code> codes = List.of(new Code("test1", new Date(), 0, new User()), new Code("test2", new Date(), 0, new User()));
 
 
 	}

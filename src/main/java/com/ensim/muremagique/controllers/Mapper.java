@@ -6,12 +6,13 @@ import java.util.stream.Collectors;
 import com.ensim.muremagique.controllers.security.UserResponse;
 import com.ensim.muremagique.entities.Code;
 import com.ensim.muremagique.entities.User;
+import com.ensim.muremagique.utils.SizeConverter;
 
 public class Mapper
 {
 	public CodeResponse map(Code code)
 	{
-		return new CodeResponse(code.getId(), code.getPath(), "1 mo", code.getUser().getLastName(),
+		return new CodeResponse(code.getId(), code.getPath(), String.format("%.2f mo", SizeConverter.toMegabytes(code.getSize())) , code.getUser().getLastName(),
 			code.getCreationDate());
 	}
 

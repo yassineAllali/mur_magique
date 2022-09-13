@@ -37,7 +37,7 @@ public class SecurityController
 	{
 		String jwt = securityService.register(registrationRequest.getEmail(),
 			registrationRequest.getPassword(), registrationRequest.getFirstName(),
-			registrationRequest.getLastName(), registrationRequest.getRole());
+			registrationRequest.getLastName(), registrationRequest.getRole() /* == null ? "admin" : "student" */);
 		Long userId = securityService.getUserId(registrationRequest.getEmail());
 		return ResponseEntity.ok(new AuthenticationResponse(jwt, userId));
 	}
